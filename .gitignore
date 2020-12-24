@@ -3,3 +3,5 @@ dist
 .vscode
 yarn.lock
 package-lock.json
+tmp/*
+!tmp/.gitkeep
