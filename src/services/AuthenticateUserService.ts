@@ -4,6 +4,8 @@ import { sign } from 'jsonwebtoken';
 
 import User from '../models/User';
 
+import AppError from '../errors/AppError';
+
 interface Request {
     email: string;
     password: string;
@@ -23,11 +25,11 @@ export default class AuthenticateUserService {
         });
 
         if (!user) {
-            throw new Error('Incorrect email/password combination');
+            throw new AppError('Incorrect email/password combination', 401);
         }
 
         if (!(await compare(password, user.password))) {
-            throw new Error('Incorrect email/password combination');
+            throw new AppError('Incorrect email/password combination', 401);
         }
 
         const secret = process.env.TOKEN_SECRET;
