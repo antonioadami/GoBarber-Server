@@ -5,11 +5,11 @@ import IAppointmentsRepository from '@modules/appointments/repositories/IAppoint
 import ICreateAppointmentDTO from '@modules/appointments/dtos/ICreateAppointmentDTO';
 
 class AppointmentsRepository implements IAppointmentsRepository {
-    constructor(
-        private ormRepository: Repository<Appointment> = getRepository(
-            Appointment,
-        ),
-    ) {}
+    private ormRepository: Repository<Appointment>;
+
+    constructor() {
+        this.ormRepository = getRepository(Appointment);
+    }
 
     public async create({
         provider_id,
