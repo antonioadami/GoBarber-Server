@@ -3,6 +3,7 @@ import { v4 } from 'uuid';
 import Appointment from '@modules/appointments/infra/typeorm/entities/Appointment';
 import IAppointmentsRepository from '@modules/appointments/repositories/IAppointmetsRepository';
 import ICreateAppointmentDTO from '@modules/appointments/dtos/ICreateAppointmentDTO';
+import { isEqual } from 'date-fns';
 
 class AppointmentsRepository implements IAppointmentsRepository {
     private appointments: Appointment[] = [];
@@ -25,7 +26,9 @@ class AppointmentsRepository implements IAppointmentsRepository {
     }
 
     public async findByDate(date: Date): Promise<Appointment | undefined> {
-        return this.appointments.find(appointment => appointment.date === date);
+        return this.appointments.find(appointment =>
+            isEqual(appointment.date, date),
+        );
     }
 }
 
