@@ -13,6 +13,8 @@ export default class FakeUserTokensRepository implements IUserTokensRepository {
             id: v4(),
             user_id,
             token: v4(),
+            created_at: new Date(),
+            updated_at: new Date(),
         });
 
         this.userTokens.push(userToken);
