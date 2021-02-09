@@ -6,19 +6,26 @@ import CreateUserService from './CreateUserService';
 import AuthenticateUserService from './AuthenticateUserService';
 import FakeHashProvider from '../providers/HashProvider/fakes/FakeHashProvider';
 
-describe('AuthenticateUser', () => {
-    it('shoud be able to authenticate', async () => {
-        const fakeUsersRepository = new FakeUsersRepository();
-        const fakeHashProvider = new FakeHashProvider();
-        const createUser = new CreateUserService(
-            fakeUsersRepository,
-            fakeHashProvider,
-        );
-        const authenticateUser = new AuthenticateUserService(
-            fakeUsersRepository,
-            fakeHashProvider,
-        );
+let fakeUsersRepository: FakeUsersRepository;
+let fakeHashProvider: FakeHashProvider;
+let createUser: CreateUserService;
+let authenticateUser: AuthenticateUserService;
 
+describe('AuthenticateUser', () => {
+    beforeEach(() => {
+        fakeUsersRepository = new FakeUsersRepository();
+        fakeHashProvider = new FakeHashProvider();
+        createUser = new CreateUserService(
+            fakeUsersRepository,
+            fakeHashProvider,
+        );
+        authenticateUser = new AuthenticateUserService(
+            fakeUsersRepository,
+            fakeHashProvider,
+        );
+    });
+
+    it('shoud be able to authenticate', async () => {
         const email = 'teste@teste.com';
         const password = 'Teste1234';
 
@@ -38,17 +45,6 @@ describe('AuthenticateUser', () => {
     });
 
     it('shoud not be able to authenticate with wrong email', async () => {
-        const fakeUsersRepository = new FakeUsersRepository();
-        const fakeHashProvider = new FakeHashProvider();
-        const createUser = new CreateUserService(
-            fakeUsersRepository,
-            fakeHashProvider,
-        );
-        const authenticateUser = new AuthenticateUserService(
-            fakeUsersRepository,
-            fakeHashProvider,
-        );
-
         const email = 'teste@teste.com';
         const wrongEmail = 'teste@teste.com.br';
         const password = 'Teste1234';
@@ -68,17 +64,6 @@ describe('AuthenticateUser', () => {
     });
 
     it('shoud not be able to authenticate with wrong password', async () => {
-        const fakeUsersRepository = new FakeUsersRepository();
-        const fakeHashProvider = new FakeHashProvider();
-        const createUser = new CreateUserService(
-            fakeUsersRepository,
-            fakeHashProvider,
-        );
-        const authenticateUser = new AuthenticateUserService(
-            fakeUsersRepository,
-            fakeHashProvider,
-        );
-
         const email = 'teste@teste.com';
         const password = 'Teste1234';
         const wrongPassword = 'Teste1234567';

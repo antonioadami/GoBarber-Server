@@ -5,16 +5,23 @@ import FakeStorageProvider from '@shared/container/providers/StorageProvider/fak
 import FakeUsersRepository from '../repositories/fakes/FakeUsersRepository';
 import UpdateUserAvatarService from './UpdateUserAvatarService';
 
-describe('UpdateUserAvatar', () => {
-    it('shoud be able to add a avatar to an user', async () => {
-        const fakeUsersRepository = new FakeUsersRepository();
-        const fakeStorageProvider = new FakeStorageProvider();
+let fakeUsersRepository: FakeUsersRepository;
+let fakeStorageProvider: FakeStorageProvider;
 
-        const updateUserAvatar = new UpdateUserAvatarService(
+let updateUserAvatar: UpdateUserAvatarService;
+
+describe('UpdateUserAvatar', () => {
+    beforeEach(() => {
+        fakeUsersRepository = new FakeUsersRepository();
+        fakeStorageProvider = new FakeStorageProvider();
+
+        updateUserAvatar = new UpdateUserAvatarService(
             fakeUsersRepository,
             fakeStorageProvider,
         );
+    });
 
+    it('shoud be able to add a avatar to an user', async () => {
         const avatarFilename = 'avatar.jpg';
 
         const user = await fakeUsersRepository.create({
@@ -32,14 +39,6 @@ describe('UpdateUserAvatar', () => {
     });
 
     it('shoud not be able to add a avatar to a nonexistent user', async () => {
-        const fakeUsersRepository = new FakeUsersRepository();
-        const fakeStorageProvider = new FakeStorageProvider();
-
-        const updateUserAvatar = new UpdateUserAvatarService(
-            fakeUsersRepository,
-            fakeStorageProvider,
-        );
-
         const avatarFilename = 'avatar.jpg';
 
         await expect(
@@ -51,15 +50,7 @@ describe('UpdateUserAvatar', () => {
     });
 
     it('shoud be able replace the avatar of an user', async () => {
-        const fakeUsersRepository = new FakeUsersRepository();
-        const fakeStorageProvider = new FakeStorageProvider();
-
         const deleteFile = jest.spyOn(fakeStorageProvider, 'deleteFile');
-
-        const updateUserAvatar = new UpdateUserAvatarService(
-            fakeUsersRepository,
-            fakeStorageProvider,
-        );
 
         const firstAvatarFilename = 'first-avatar.jpg';
         const secondAvatarFilename = 'second-avatar.jpg';
