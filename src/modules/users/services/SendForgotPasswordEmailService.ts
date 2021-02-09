@@ -15,8 +15,10 @@ export default class SendForgotPasswordEmailService {
     constructor(
         @inject('UsersRepository')
         private usersRepository: IUsersRepository,
+
         @inject('MailProvider')
         private mailProvider: IMailProvider,
+
         @inject('UserTokensRepository')
         private userTokensRepository: IUserTokensRepository,
     ) {}
@@ -30,9 +32,16 @@ export default class SendForgotPasswordEmailService {
 
         const { token } = await this.userTokensRepository.generate(user.id);
 
-        await this.mailProvider.sendMail(
-            email,
-            `Pedido de recuperação de senha: ${token}`,
-        );
+        await this.mailProvider.sendMail({
+            to: {
+                email: user.email,
+                name: user.name,
+            },
+            subject: '[GoBarber] Recuperação de senha',
+            templateData: {
+                template: 'Olá, {{name}}: {{token}}',
+                variables: { name: user.name, token },
+            },
+        });
     }
 }
