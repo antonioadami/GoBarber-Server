@@ -1,4 +1,5 @@
 import { inject, injectable } from 'tsyringe';
+import path from 'path';
 
 import AppError from '@shared/errors/AppError';
 // import User from '@modules/users/infra/typeorm/entities/User';
@@ -32,6 +33,13 @@ export default class SendForgotPasswordEmailService {
 
         const { token } = await this.userTokensRepository.generate(user.id);
 
+        const forgotPasswordTemplate = path.resolve(
+            __dirname,
+            '..',
+            'views',
+            'forgot_password.hbs',
+        );
+
         await this.mailProvider.sendMail({
             to: {
                 email: user.email,
@@ -39,8 +47,11 @@ export default class SendForgotPasswordEmailService {
             },
             subject: '[GoBarber] Recuperação de senha',
             templateData: {
-                template: 'Olá, {{name}}: {{token}}',
-                variables: { name: user.name, token },
+                file: forgotPasswordTemplate,
+                variables: {
+                    name: user.name,
+                    link: `http://localhost:3000/reset_password?token=${token}`,
+                },
             },
         });
     }
