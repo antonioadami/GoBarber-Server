@@ -8,7 +8,7 @@ import ShowProfileService from './ShowProfileService';
 let fakeUsersRepository: FakeUsersRepository;
 let showProfile: ShowProfileService;
 
-describe('UpdateUserAvatar', () => {
+describe('ShowProfile', () => {
     beforeEach(() => {
         fakeUsersRepository = new FakeUsersRepository();
 
