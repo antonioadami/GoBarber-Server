@@ -1,4 +1,5 @@
 import 'reflect-metadata';
+import { v4 } from 'uuid';
 
 import AppError from '@shared/errors/AppError';
 import FakeUsersRepository from '../repositories/fakes/FakeUsersRepository';
@@ -39,6 +40,16 @@ describe('UpdateUserAvatar', () => {
 
         expect(updatedUser.name).toBe(newName);
         expect(updatedUser.email).toBe(newEmail);
+    });
+
+    it('shoud not be able to update non-existing user', async () => {
+        await expect(
+            updateProfile.execute({
+                user_id: v4(),
+                name: 'Um Nome',
+                email: 'teste@teste.com',
+            }),
+        ).rejects.toBeInstanceOf(AppError);
     });
 
     it('shoud not be able to change to another user email', async () => {
