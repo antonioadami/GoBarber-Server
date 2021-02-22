@@ -56,8 +56,6 @@ class FakeAppointmentsRepository implements IAppointmentsRepository {
         month,
         year,
     }: IFindAllInDayFromProvider): Promise<Appointment[]> {
-        console.log(this.appointments);
-
         this.appointments.filter(appointment => {
             return (
                 appointment.provider_id === provider_id &&
