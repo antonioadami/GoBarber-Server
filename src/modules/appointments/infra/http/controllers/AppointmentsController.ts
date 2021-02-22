@@ -14,11 +14,13 @@ export default class AppointmentsController {
         );
 
         const { provider_id, date } = request.body;
+        const { id } = request.user;
 
         const parsedDate = parseISO(date);
 
         const appointment = await createAppointmentService.execute({
             date: parsedDate,
+            user_id: id,
             provider_id,
         });
 
