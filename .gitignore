@@ -3,6 +3,8 @@ dist
 .vscode
 yarn.lock
 package-lock.json
+.env
 tmp/*
 !tmp/.gitkeep
 coverage
+ormconfig.json
