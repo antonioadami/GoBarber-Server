@@ -2,21 +2,25 @@ import 'reflect-metadata';
 
 import AppError from '@shared/errors/AppError';
 import FakeNotificationsRepository from '@modules/notifications/repositories/fakes/FakeNotificationsRepository';
+import FakeCacheProvider from '@shared/container/providers/CacheProvider/fakes/FakeCacheProvider';
 import CreateAppointmentService from './CreateAppointmentService';
 import FakeAppoitmentsRepository from '../repositories/fakes/FakeAppointmentsRepository';
 
 let fakeAppoitmentsRepository: FakeAppoitmentsRepository;
 let fakeNotificationsRepository: FakeNotificationsRepository;
-let createApoointment: CreateAppointmentService;
+let fakeCacheProvider: FakeCacheProvider;
+let createAppointment: CreateAppointmentService;
 
 describe('CreateAppointment', () => {
     beforeEach(() => {
         fakeAppoitmentsRepository = new FakeAppoitmentsRepository();
         fakeNotificationsRepository = new FakeNotificationsRepository();
+        fakeCacheProvider = new FakeCacheProvider();
 
-        createApoointment = new CreateAppointmentService(
+        createAppointment = new CreateAppointmentService(
             fakeAppoitmentsRepository,
             fakeNotificationsRepository,
+            fakeCacheProvider,
         );
     });
 
@@ -25,7 +29,7 @@ describe('CreateAppointment', () => {
             return new Date(2021, 1, 1, 12).getTime();
         });
 
-        const appointment = await createApoointment.execute({
+        const appointment = await createAppointment.execute({
             date: new Date(2021, 1, 5, 12),
             provider_id: '23424',
             user_id: '12345',
@@ -39,14 +43,14 @@ describe('CreateAppointment', () => {
         const date = new Date();
         date.setDate(date.getDate() + 1);
 
-        await createApoointment.execute({
+        await createAppointment.execute({
             date,
             provider_id: '23424',
             user_id: '12345',
         });
 
         await expect(
-            createApoointment.execute({
+            createAppointment.execute({
                 date,
                 provider_id: '23424',
                 user_id: '12345',
@@ -60,7 +64,7 @@ describe('CreateAppointment', () => {
         });
 
         await expect(
-            createApoointment.execute({
+            createAppointment.execute({
                 date: new Date(2019, 1, 1, 10),
                 provider_id: '1324',
                 user_id: '1234',
@@ -73,7 +77,7 @@ describe('CreateAppointment', () => {
         date.setDate(date.getDate() + 1);
 
         await expect(
-            createApoointment.execute({
+            createAppointment.execute({
                 date,
                 provider_id: '1234',
                 user_id: '1234',
@@ -88,10 +92,10 @@ describe('CreateAppointment', () => {
         dateAfter.setDate(dateAfter.getDate() + 1);
 
         dateBefore.setHours(7);
-        dateAfter.setDate(20);
+        dateAfter.setHours(20);
 
         await expect(
-            createApoointment.execute({
+            createAppointment.execute({
                 date: dateBefore,
                 provider_id: 'provider-id',
                 user_id: 'user-id',
@@ -99,7 +103,7 @@ describe('CreateAppointment', () => {
         ).rejects.toBeInstanceOf(AppError);
 
         await expect(
-            createApoointment.execute({
+            createAppointment.execute({
                 date: dateAfter,
                 provider_id: 'provider-id',
                 user_id: 'user-id',
