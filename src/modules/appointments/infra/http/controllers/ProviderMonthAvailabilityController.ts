@@ -12,12 +12,12 @@ export default class ProviderMonthAvailabilityController {
             ListProvidersMonthAvailabilityService,
         );
 
-        const { month, year } = request.body;
+        const { month, year } = request.query;
         const { provider_id } = request.params;
 
         const availability = await listAvailability.execute({
-            month,
-            year,
+            month: Number(month),
+            year: Number(year),
             provider_id,
         });
 

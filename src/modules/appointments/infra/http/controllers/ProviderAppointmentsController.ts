@@ -12,13 +12,13 @@ export default class ProviderAppointmentsController {
             ListProviderAppointmentsService,
         );
 
-        const { day, month, year } = request.body;
+        const { day, month, year } = request.query;
         const provider_id = request.user.id;
 
         const availability = await listAppointments.execute({
-            month,
-            year,
-            day,
+            month: Number(month),
+            year: Number(year),
+            day: Number(day),
             provider_id,
         });
 
